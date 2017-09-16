@@ -51,3 +51,12 @@ def boarding_feed(request):
         json_list.append(json_entry)
     json_list.append({"date": "2017-06-24"})
     return HttpResponse(json.dumps(json_list), content_type='application/json', )
+
+
+class BoardingView(DetailView):
+    model = Visit
+
+
+class BoardingView(ListView):
+    model = Visit
+    template_name = 'fullcalendar.html'
