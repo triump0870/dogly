@@ -1,7 +1,7 @@
 import os
 
-PROJECT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-print PROJECT_PATH
+PROJECT_PATH = os.path.realpath(os.path.os.path.dirname(os.path.os.path.dirname(os.path.os.path.dirname(__file__))))
+
 DEBUG = True
 
 ADMINS = (
@@ -9,18 +9,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(PROJECT_PATH, 'dogly.db'),
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',  # Set to empty string for default.
-    }
-}
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -62,7 +50,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'assets')
+STATIC_ROOT = os.path.os.path.join(PROJECT_PATH, 'assets')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -83,10 +71,34 @@ STATICFILES_FINDERS = (
     'djangobower.finders.BowerFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '1-%gfd@@8l$8r=ck_7^dy5_x!a0f5%qfj@ix#!xig(_2zq&b&2'
+# Use 12factor inspired environment variables or from a file
+import environ
 
-# List of callables that know how to import templates from various sources.
+env = environ.Env()
+
+# Ideally move env file should be outside the git repo
+# i.e. BASE_DIR.parent.parent
+env_file = os.path.join(os.path.dirname(__file__), 'local.env')
+if os.path.exists(env_file):
+    environ.Env.read_env(str(env_file))
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
+SECRET_KEY = env('SECRET_KEY')
+
+# Database
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+
+DATABASES = {
+    # Raises ImproperlyConfigured exception if DATABASE_URL not in
+    # os.environ
+    'default': env.db(),
+}
+
+# List of callable that know how to import templates from various sources.
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -159,7 +171,7 @@ BOWER_INSTALLED_APPS = (
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [os.path.join(PROJECT_PATH, 'templates')],
+    'DIRS': [os.path.os.path.join(PROJECT_PATH, 'templates')],
     'APP_DIRS': True,
     'OPTIONS': {
         'context_processors': [
@@ -171,3 +183,10 @@ TEMPLATES = [{
         ],
     },
 }]
+
+# For Bootstrap 3, change error alert to 'danger'
+from django.contrib import messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
