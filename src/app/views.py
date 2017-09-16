@@ -24,3 +24,30 @@ def calendar(request, start="2017-09-01", end="2017-09-30"):
     return render_to_response('fullcalendar.html', {'calendar': mark_safe(cal), })
 
 
+def boarding_feed(request):
+    from django.utils.timezone import utc
+    from django.core.serializers.json import DjangoJSONEncoder
+
+    if request.is_ajax():
+        print 'Its ajax from fullCalendar()'
+
+    try:
+        start = datetime.fromtimestamp(int(request.GET.get('start', False))).replace(tzinfo=utc)
+        end = datetime.fromtimestamp(int(request.GET.get('end', False)))
+    except ValueError:
+        start = datetime.now().replace(tzinfo=utc)
+        end = start + timedelta(days=7)
+
+    entries = Visit.objects.all()
+    print entries
+    json_list = []
+    for entry in entries:
+        id = entry.id
+        start = entry.start_date.strftime("%Y-%m-%dT%H:%M:%S")
+        allDay = False
+
+        json_entry = {'id': id, 'start': start, 'allDay': allDay, 'title': entry.dog.first_name}
+        json_entry = json.dumps(json_entry, cls=DjangoJSONEncoder)
+        json_list.append(json_entry)
+    json_list.append({"date": "2017-06-24"})
+    return HttpResponse(json.dumps(json_list), content_type='application/json', )
