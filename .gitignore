@@ -60,4 +60,5 @@ Desktop.ini
 .idea/
 sample/
 logs/
-
+bower_components
+assets
