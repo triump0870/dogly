@@ -8,23 +8,30 @@
 {% block tab_id %}id="home_tab"{% endblock %}
 
 {% block extra_head %}
-<link rel='stylesheet' type='text/css' href="{% static 'fullcalendar/dist/fullcalendar.css' %}" />
+<link rel='stylesheet' type='text/css' href="{% static 'fullcalendar/dist/fullcalendar.css' %}"/>
 <script type='text/javascript' src="{% static 'moment/moment.js' %}"></script>
 <script type='text/javascript' src="{% static 'fullcalendar/dist/fullcalendar.js' %}"></script>
 {% endblock %}
 
 {% block body %}
-<div id="calendar"></div>
-<script type='text/javascript'>
-$(document).ready(function() {
+<div class="container">
+    <br/>
+    <div class="row">
+        <div class='col-sm-3'>
+            <div class="form-group">
+                <div class='input-group date'>
+                    <input type='text' class="form-control"/>
+                    <button class="btn btn-success" id='submit'>Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    // page is now ready, initialize the calendar...
-    $('#calendar').fullCalendar({
-        // put your options and callbacks here
-      events: '/schedule/api/occurrences?calendar_slug=example'
-    })
-
-});
-</script>
+<div class="container">
+    <div class="col-sm-6">
+        {{calendar}}
+    </div>
+</div>
 
 {% endblock %}
