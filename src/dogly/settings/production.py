@@ -19,7 +19,7 @@ loaders = [
 ]
 
 TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
-TEMPLATES[0].update({"APP_DIRS": False})
+# TEMPLATES[0].update({"APP_DIRS": False})
 
 # Log everything to the logs directory at the top
 LOGFILE_ROOT = os.path.join(os.path.dirname(PROJECT_PATH), 'logs')
