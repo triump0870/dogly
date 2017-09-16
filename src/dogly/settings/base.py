@@ -116,7 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'djangobower',
     'schedule',
-    # 'app'
+    'app'
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
