@@ -12,7 +12,10 @@ from app.models import Visit
 from app.utils import BoardingCalendar
 
 
-def calendar_view(request, start="2017-09-01", end="2017-09-30"):
+def calendar_view(request):
+    # start = "2016-01-01", end = "2016-01-30"
+    start = request.POST.get('start', "2016-01-01")
+    end = request.POST.get('end', "2016-01-31")
     start_date = datetime.strptime(start, "%Y-%m-%d").date()
     end_date = datetime.strptime(end, "%Y-%m-%d").date()
 
