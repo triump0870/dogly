@@ -42,8 +42,3 @@ class BoardingCalendar(HTMLCalendar):
 
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
-
-
-def load_data(db_model):
-    db_model.objects.all().delete()
-    pass
