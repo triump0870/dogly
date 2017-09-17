@@ -1,10 +1,13 @@
-from django.core.management.base import BaseCommand
+import calendar
 import random
 import string
-import calendar
-from app.models import Visit, Dog
+import sys
 from datetime import timedelta, date, datetime
+
 import holidays
+from django.core.management.base import BaseCommand
+
+from app.models import Visit, Dog
 
 
 class Command(BaseCommand):
@@ -47,7 +50,7 @@ class Command(BaseCommand):
             visit.save()
             print visit
         except Exception as e:
-            # print "error: ", e.message
+            print "error: ", e.message
             pass
 
     def handle(self, *args, **options):
@@ -56,6 +59,7 @@ class Command(BaseCommand):
             Dog.objects.all().delete()
         except Exception as e:
             print "Error: ", e.message
+            sys.exit(1)
 
         year = 2016
         dogs = ["{} {}".format("".join([random.SystemRandom().choice(string.ascii_letters) for i in range(10)]),
@@ -71,7 +75,7 @@ class Command(BaseCommand):
                 )
                 dog.save()
             except Exception as e:
-                # print "Error: ", e.message
+                print "Error: ", e.message
                 pass
         dogs = Dog.objects.all()
         holidays = self.holidays_list(year)
