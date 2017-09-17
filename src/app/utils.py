@@ -17,7 +17,6 @@ class BoardingCalendar(HTMLCalendar):
             count = 0
             body = ['<p>']
             date_cell = "%s-%s-%s" % (str(self.year), str(self.month), str(day))
-            print date_cell
             for visit in self.visits.keys():
                 if day in range(visit[0], visit[1] + 1):
                     count += 1
@@ -28,6 +27,10 @@ class BoardingCalendar(HTMLCalendar):
 
     def formatmonth(self, year, month):
         self.year, self.month = year, month
+        # a = []
+        # a.append('<table border="0" cellpadding="0" cellspacing="0" class="month">')
+        # a.append(self.formatmonthname(year, first_month))
+        # a.append(self.firstweekday)
         return super(BoardingCalendar, self).formatmonth(year, month)
 
     def group_by_day(self, visits):
