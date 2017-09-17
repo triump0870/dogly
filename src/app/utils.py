@@ -1,6 +1,7 @@
 from calendar import HTMLCalendar
 from datetime import date
 from itertools import groupby
+from django.core.urlresolvers import reverse
 
 
 class BoardingCalendar(HTMLCalendar):
@@ -15,12 +16,14 @@ class BoardingCalendar(HTMLCalendar):
                 cssclass += ' today'
             count = 0
             body = ['<p>']
-
+            date_cell = "%s-%s-%s" % (str(self.year), str(self.month), str(day))
+            print date_cell
             for visit in self.visits.keys():
                 if day in range(visit[0], visit[1] + 1):
                     count += 1
             body.append('%s %s' % (count, 'Dog' if count == 1 else 'Dogs'))
-            return self.day_cell(cssclass, '%d %s' % (day, ''.join(body)))
+            return self.day_cell(cssclass, '<a href="%s?date=%s">%d %s</a>' % (
+                reverse('app:in-the-house'), date_cell, day, ''.join(body)))
         return self.day_cell('noday', '&nbsp;')
 
     def formatmonth(self, year, month):
@@ -36,3 +39,8 @@ class BoardingCalendar(HTMLCalendar):
 
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
+
+
+def load_data(db_model):
+    db_model.objects.all().delete()
+    pass

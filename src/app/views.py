@@ -12,7 +12,7 @@ from app.models import Visit
 from app.utils import BoardingCalendar
 
 
-def calendar(request, start="2017-09-01", end="2017-09-30"):
+def calendar_view(request, start="2017-09-01", end="2017-09-30"):
     start_date = datetime.strptime(start, "%Y-%m-%d").date()
     end_date = datetime.strptime(end, "%Y-%m-%d").date()
 
@@ -60,3 +60,18 @@ class BoardingView(DetailView):
 class BoardingView(ListView):
     model = Visit
     template_name = 'fullcalendar.html'
+
+
+def in_the_house_view(request):
+    date = request.GET.get('date')
+    print "date:", date
+    date = datetime.strptime(date, "%Y-%m-%d").date()
+    print "new date: ", date, type(date)
+    visits = Visit.objects.filter(
+        Q(start_date__lte=date) &
+        Q(end_date__gt=date)
+    )
+    context = {
+        'visits': visits
+    }
+    return render_to_response('detail_view.html', context)
