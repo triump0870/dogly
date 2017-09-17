@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% load i18n staticfiles %}
+
+{% block container %}
+
+<div class="container">
+    <div class="col-sm-6">
+        <ul>
+            {% for visit in visits %}
+            <div class="row">
+                <li>
+                    <span>Dog</span>{{forloop.counter}}<span>{{visit.dog.get_full_name}}</span><span>{{visit.start_date}}<span>
+                    <span>{{visit.end_date}}</span>
+                </li>
+            </div>
+            {% empty %}
+            <p>No Dogs</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

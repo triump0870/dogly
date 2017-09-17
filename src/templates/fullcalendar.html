@@ -3,27 +3,22 @@
 
 {% load i18n staticfiles %}
 
-{% block head_title %}{% trans "Fullcalendar" %}{% endblock %}
 
-{% block tab_id %}id="home_tab"{% endblock %}
-
-{% block extra_head %}
-<link rel='stylesheet' type='text/css' href="{% static 'fullcalendar/dist/fullcalendar.css' %}"/>
-<script type='text/javascript' src="{% static 'moment/moment.js' %}"></script>
-<script type='text/javascript' src="{% static 'fullcalendar/dist/fullcalendar.js' %}"></script>
-{% endblock %}
-
-{% block body %}
+{% block container %}
 <div class="container">
     <br/>
     <div class="row">
         <div class='col-sm-3'>
-            <div class="form-group">
-                <div class='input-group date'>
-                    <input type='text' class="form-control"/>
-                    <button class="btn btn-success" id='submit'>Submit</button>
+            <form>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='text' class="form-control" placeholder="Start Date e.g: 2017-07-12">
+                        <input type="text" class="form-control" placeholder="End Date e.g: 2017-08-12">
+                        <hr>
+                        <button class="btn btn-success" id='submit'>Submit</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

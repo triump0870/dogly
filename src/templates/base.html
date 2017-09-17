@@ -1,18 +1,39 @@
-{% extends "base.html" %}
-{% load staticfiles i18n %}
-{% block extra_head %}
-{{ block.super }}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+    {% load staticfiles %}
 
-{% block rtab_id %}id="schedule_tab"{% endblock %}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}{% endblock  %}">
 
-{% block subnav %}
-<ul>
-    {% if user.is_authenticated %}
-        <li><a href="">{% trans "Create a Calendar" %}</a></li>
-        <li><a href="">{% trans "Your Calendars" %}</a></li>
-    {% endif %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
-        <li><a href="">{% trans "All Calendars" %}</a></li>
-    </ul>
-{% endblock %}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+      {% block extra_head %} {% endblock %}
+  </head>
+
+  <body>
+
+  {% block container %}
+    <div class="container">
+    </div><!-- /.container -->
+    {% endblock %}
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js'  %}"></script>
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>
