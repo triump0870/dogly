@@ -34,7 +34,7 @@ def calendar_view(request):
         Q(start_date__range=(start_date, end_date)) |
         Q(end_date__range=(start_date, end_date))
     )
-    cal = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month, end_date.month)
+    cal = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
     return render(request, 'fullcalendar.html', {'calendar': mark_safe(cal)}, content_type='utf-8')
 
 
