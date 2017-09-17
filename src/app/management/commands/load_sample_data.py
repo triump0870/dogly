@@ -64,7 +64,7 @@ class Command(BaseCommand):
         year = 2016
         dogs = ["{} {}".format("".join([random.SystemRandom().choice(string.ascii_letters) for i in range(10)]),
                                "".join([random.SystemRandom().choice(string.ascii_letters) for i in range(10)]))
-                for _ in range(10)]
+                for _ in range(100)]
 
         for dog in dogs:
             first_name, last_name = dog.split(' ')
@@ -83,7 +83,6 @@ class Command(BaseCommand):
         for month in xrange(1, 13):
             month_days = calendar.monthrange(year, month)[1]
             favorable_days = self.favorable_days(date(year, month, 1))
-            print "favalorable days:", favorable_days
             for day in range(1, month_days + 1):
                 start_date = date(year, month, day)
                 for _ in range(5):
