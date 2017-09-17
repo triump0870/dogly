@@ -19,6 +19,10 @@ def calendar_view(request):
     if request.method == 'POST':
         start = request.POST.get('start', "")
         end = request.POST.get('end', "")
+        if not start:
+            return HttpResponse('Start date was not provided')
+        if not end:
+            return HttpResponse('End date was not provided')
         start_date = datetime.strptime(start, "%Y-%m-%d").date()
         end_date = datetime.strptime(end, "%Y-%m-%d").date()
 
