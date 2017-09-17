@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from django.http import HttpResponse
 # Create your views here.
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.utils.safestring import mark_safe
 from django.views.generic import DetailView, ListView
 
@@ -13,18 +13,26 @@ from app.utils import BoardingCalendar
 
 
 def calendar_view(request):
-    # start = "2016-01-01", end = "2016-01-30"
-    start = request.POST.get('start', "2016-01-01")
-    end = request.POST.get('end', "2016-01-31")
-    start_date = datetime.strptime(start, "%Y-%m-%d").date()
-    end_date = datetime.strptime(end, "%Y-%m-%d").date()
+    start = request.POST.get('start', "")
+    end = request.POST.get('end', "")
+
+    if not start:
+        start_date = datetime.today().date()
+    else:
+        start_date = datetime.strptime(start, "%Y-%m-%d").date()
+
+    if not end:
+        end_date = datetime.today().date() + timedelta(days=30)
+    else:
+        end_date = datetime.strptime(end, "%Y-%m-%d").date()
 
     visits = Visit.objects.filter(
         Q(start_date__range=(start_date, end_date)) |
         Q(end_date__range=(start_date, end_date))
     )
-    cal = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
-    return render_to_response('fullcalendar.html', {'calendar': mark_safe(cal), })
+    cal = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month, end_date.month)
+    return render(request, 'fullcalendar.html', {'calendar': mark_safe(cal)})
+    # return render_to_response('fullcalendar.html', {'calendar': mark_safe(cal), })
 
 
 def boarding_feed(request):
