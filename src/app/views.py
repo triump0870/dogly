@@ -30,8 +30,9 @@ def boarding_list(request):
         Q(start_date__range=(start_date, end_date)) |
         Q(end_date__range=(start_date, end_date))
     )
-    cal = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
-    return render(request, 'boarding.html', {'calendar': mark_safe(cal)})
+    cal1 = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
+    cal2 = BoardingCalendar(visits).formatmonth(end_date.year, end_date.month)
+    return render(request, 'boarding.html', {'month1': mark_safe(cal1),'month2': mark_safe(cal2)})
 
 
 def in_the_house_view(request):
