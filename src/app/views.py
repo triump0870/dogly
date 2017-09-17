@@ -1,14 +1,11 @@
-import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.core.management import call_command
-from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse
 # Create your views here.
 from django.shortcuts import render_to_response, render
 from django.utils.safestring import mark_safe
-from django.views.generic import DetailView, ListView
 
 from app.models import Visit
 from app.utils import BoardingCalendar
@@ -35,6 +32,7 @@ def boarding_list(request):
     )
     cal = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
     return render(request, 'boarding.html', {'calendar': mark_safe(cal)})
+
 
 def in_the_house_view(request):
     date = request.GET.get('date')

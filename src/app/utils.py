@@ -1,6 +1,7 @@
 from calendar import HTMLCalendar
 from datetime import date
 from itertools import groupby
+
 from django.core.urlresolvers import reverse
 
 
@@ -27,10 +28,6 @@ class BoardingCalendar(HTMLCalendar):
 
     def formatmonth(self, year, month):
         self.year, self.month = year, month
-        # a = []
-        # a.append('<table border="0" cellpadding="0" cellspacing="0" class="month">')
-        # a.append(self.formatmonthname(year, first_month))
-        # a.append(self.firstweekday)
         return super(BoardingCalendar, self).formatmonth(year, month)
 
     def group_by_day(self, visits):
