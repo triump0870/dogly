@@ -9,7 +9,8 @@
     <br/>
     <div class="row">
         <div class='col-sm-3'>
-            <form>
+            <form method="POST">
+                {% csrf_token %}
                 <div class="form-group">
                     <div class='input-group date'>
                         <input type='text' class="form-control" placeholder="Start Date e.g: 2017-07-12">
