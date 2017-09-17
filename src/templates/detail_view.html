@@ -6,13 +6,12 @@
 {% block container %}
 
 <div class="container">
-    <div class="col-sm-6">
+    <div class="col-sm-12">
         <ul>
             {% for visit in visits %}
             <div class="row">
                 <li>
-                    <span>Dog</span>{{forloop.counter}}<span>{{visit.dog.get_full_name}}</span><span>{{visit.start_date}}<span>
-                    <span>{{visit.end_date}}</span>
+                    <span style="padding-right:5em">Dog</span>{{forloop.counter}}<span style="padding-left:5em">{{visit.dog.get_full_name}}</span><span style="padding-left:5em">{{visit.start_date}}<span><span style="padding-left:5em">{{visit.end_date}}</span>
                 </li>
             </div>
             {% empty %}
