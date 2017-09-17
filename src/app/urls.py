@@ -1,14 +1,12 @@
 from django.conf.urls import url
 from django.contrib import admin
 
-from app.views import calendar_view, boarding_feed, BoardingView, in_the_house_view
+from app.views import boarding_list, in_the_house_view, load_sample_data_view
 
 admin.autodiscover()
 
 urlpatterns = [
-    # url(r'^$', calendar, name='cal'),
-    url(r'^(?P<pk>\d+)/$', BoardingView.as_view(), name='boarding-detail'),
-    url(r'^', calendar_view, name='boarding-list'),
-    url(r'^feed/', boarding_feed, name='boarding-feed'),
-    url(r'^in-the-house/', in_the_house_view, name='in-the-house'),
+    url(r'^$', boarding_list, name='boarding-list'),
+    url(r'^in-the-house/$', in_the_house_view, name='in-the-house'),
+    url(r'^load/load_sample_data/$', load_sample_data_view, name='load_sample_data_view'),
 ]
