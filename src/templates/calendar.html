@@ -8,23 +8,34 @@
 <div class="container">
     <br/>
     <div class="row">
-        <a class="btn btn-success" href="{% url 'app:load-sample-data' %}">Load Data</a>
-        <a class="btn btn-success" href="{% url 'admin:index' %}">Admin</a>
-
-    </div>
-    <div class="row">
-        <div class='col-sm-3'>
+        <div class="col-sm-4">
+            <form action="{% url 'app:load-sample-data' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type='text' name='year' class="form-control" placeholder="Year e.g: 2016">
+                        <hr>
+                        <button class="btn btn-success">Load Data</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class='col-sm-4'>
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                     <div class='input-group date'>
-                        <input type='text' name='start_date' class="form-control" placeholder="Start Date e.g: 2017-07-12">
+                        <input type='text' name='start_date' class="form-control"
+                               placeholder="Start Date e.g: 2017-07-12">
                         <input type="text" name='end_date' class="form-control" placeholder="End Date e.g: 2017-08-12">
                         <hr>
                         <button class="btn btn-success" id='submit'>Submit</button>
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="col-sm-4">
+            <a class="btn btn-success" href="{% url 'admin:index' %}">Admin</a>
         </div>
     </div>
 </div>
