@@ -8,7 +8,9 @@ from django.core.urlresolvers import reverse
 class BoardingCalendar(HTMLCalendar):
     def __init__(self, visits):
         super(BoardingCalendar, self).__init__()
-        self.visits = self.group_by_day(visits)
+
+        # Naming of self.visit was changed to self.boardings for continuity
+        self.boardings = self.group_by_day(visits)
 
     def formatday(self, day, weekday):
         if day != 0:
@@ -18,12 +20,18 @@ class BoardingCalendar(HTMLCalendar):
             count = 0
             body = ['<p>']
             date_cell = "%s-%s-%s" % (str(self.year), str(self.month), str(day))
-            for visit in self.visits.keys():
-                if day in range(visit[0], visit[1] + 1):
+            for period in self.boardings.keys():
+                # Here period is a tuple of two day elements, e.g (20, 25)
+                # Max days in a month is 31, but the Python range(x,y) function iters
+                # in the range x<=item<y, but we need the max range (y) inclusive in our range
+                # i.e x<=item<=y
+
+                if day in range(period[0], period[1] + 1):
                     count += 1
+
             body.append('%s %s' % (count, 'Dog' if count == 1 else 'Dogs'))
             return self.day_cell(cssclass, '<a href="%s?date=%s">%d %s</a>' % (
-                reverse('app:in-the-house'), date_cell, day, ''.join(body)))
+                reverse('app:boardings'), date_cell, day, ''.join(body)))
         return self.day_cell('noday', '&nbsp;')
 
     def formatmonth(self, year, month):
@@ -31,10 +39,11 @@ class BoardingCalendar(HTMLCalendar):
         return super(BoardingCalendar, self).formatmonth(year, month)
 
     def group_by_day(self, visits):
-        field = lambda visit: (visit.start_date.day, visit.end_date.day)
+        # Naming was fixed here
+        boarding_period = lambda visit: (visit.start_date.day, visit.end_date.day)
 
         return dict(
-            [(day, list(items)) for day, items in groupby(visits, field)]
+            [(period, list(boardings)) for period, boardings in groupby(visits, boarding_period)]
         )
 
     def day_cell(self, cssclass, body):
