@@ -53,6 +53,9 @@ class Command(BaseCommand):
             print "error: ", e.message
             pass
 
+    def add_arguments(self, parser):
+        parser.add_argument('year', type=int)
+
     def handle(self, *args, **options):
         try:
             Visit.objects.all().delete()
@@ -61,7 +64,8 @@ class Command(BaseCommand):
             print "Error: ", e.message
             sys.exit(1)
 
-        year = 2016
+        year = options['year'] if options['year'] is not None else 2016
+        print year, type(year)
         dogs = ["{} {}".format("".join([random.SystemRandom().choice(string.ascii_letters) for i in range(10)]),
                                "".join([random.SystemRandom().choice(string.ascii_letters) for i in range(10)]))
                 for _ in range(100)]
