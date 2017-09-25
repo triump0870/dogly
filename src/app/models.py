@@ -55,6 +55,3 @@ class Visit(models.Model):
             raise ValidationError('Overlapping boarding visit for dog [%s]' % self.dog.id)
 
         super(Visit, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('app:boarding-detail', args=(self.id,))
