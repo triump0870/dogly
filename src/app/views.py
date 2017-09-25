@@ -77,6 +77,8 @@ def boardings(request):
     return render_to_response('detail_view.html', context)
 
 
-def load_sample_data_view(request):
-    call_command('load_sample_data')
+def load_data(request):
+    year = request.GET.get('year', "")
+    year = year if year else 2016
+    call_command('load_sample_data', int(year))
     return HttpResponse('Data loaded')
