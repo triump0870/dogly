@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import calendar as cal
 from django.core.management import call_command
 from django.db.models import Q
 from django.http import HttpResponse
@@ -13,29 +13,55 @@ from app.utils import BoardingCalendar
 
 def calendar(request):
     if request.method == 'POST':
-        start = request.POST.get('start', "")
-        end = request.POST.get('end', "")
-        if not start:
+        start_date = request.POST.get('start_date', "")
+        end_date = request.POST.get('end_date', "")
+        if not start_date:
             return HttpResponse('Start date was not provided')
-        if not end:
+        if not end_date:
             return HttpResponse('End date was not provided')
-        start_date = datetime.strptime(start, "%Y-%m-%d").date()
-        end_date = datetime.strptime(end, "%Y-%m-%d").date()
+    else:
+        now = datetime.now()
+        start_date = now.replace(day=1).strftime("%Y-%m-%d")
+        end_date = now.replace(day=cal.monthrange(now.year, now.month)[1]).strftime("%Y-%m-%d")
+
+    try:
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except ValueError as e:
+        return HttpResponse(e.message)
+
+    if end_date < start_date:
+        return HttpResponse("End date can't be less than start date")
+
+    # Fixed the Bug
+    visits = Visit.objects.filter(
+        Q(start_date__lte=start_date, end_date__gte=start_date) |
+        Q(start_date__lt=end_date, end_date__gte=end_date)
+    )
+
+    if start_date.month == end_date.month:
+        start_month = BoardingCalendar(
+            visits,
+            start_date.day,
+            end_date.day).formatmonth(start_date.year, start_date.month)
+        end_month = ""
+
+    elif start_date.month < end_date.month:
+        start_month = BoardingCalendar(
+            visits,
+            start_date.day,
+            cal.monthrange(start_date.year, start_date.month)[1]).formatmonth(start_date.year, start_date.month)
+        end_month = BoardingCalendar(visits, 1, end_date.day).formatmonth(end_date.year, end_date.month)
 
     else:
-        start_date = datetime.strptime("2016-01-01", "%Y-%m-%d").date()
-        end_date = datetime.strptime("2016-02-29", "%Y-%m-%d").date()
+        start_month = BoardingCalendar(
+            visits,
+            start_date.day,
+            cal.monthrange(start_date.year, start_date.month)[1]).formatmonth(start_date.year, start_date.month)
+        end_month = ""
 
-    # Todo: Bug
-    visits = Visit.objects.filter(
-        Q(start_date__range=(start_date, end_date)) |
-        Q(end_date__range=(start_date, end_date))
-    )
-    # Todo: FIXbug
-
-    start_month = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
-    end_month = BoardingCalendar(visits).formatmonth(end_date.year, end_date.month)
-    return render(request, 'calendar.html', {'start_month': mark_safe(start_month), 'end_month': mark_safe(end_month)})
+    return render(request, 'calendar.html',
+                  {'start_month': mark_safe(start_month), 'end_month': mark_safe(end_month)})
 
 
 def boardings(request):
