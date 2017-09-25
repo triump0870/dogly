@@ -6,14 +6,17 @@ from django.core.urlresolvers import reverse
 
 
 class BoardingCalendar(HTMLCalendar):
-    def __init__(self, visits):
+    def __init__(self, visits, start_date, end_date):
         super(BoardingCalendar, self).__init__()
 
         # Naming of self.visit was changed to self.boardings for continuity
         self.boardings = self.group_by_day(visits)
+        self.start_date = start_date
+        self.end_date = end_date
+
 
     def formatday(self, day, weekday):
-        if day != 0:
+        if self.start_date <= day <= self.end_date :
             cssclass = self.cssclasses[weekday]
             if date.today() == date(self.year, self.month, day):
                 cssclass += ' today'
@@ -30,9 +33,9 @@ class BoardingCalendar(HTMLCalendar):
                     count += 1
 
             body.append('%s %s' % (count, 'Dog' if count == 1 else 'Dogs'))
-            return self.day_cell(cssclass, '<a href="%s?date=%s">%d %s</a>' % (
+            return self.day_cell(cssclass, '<a class="form-control" href="%s?date=%s">%d</a><span class="form-control">%s</span>' % (
                 reverse('app:boardings'), date_cell, day, ''.join(body)))
-        return self.day_cell('noday', '&nbsp;')
+        return self.day_cell('Invalid', '&nbsp;')
 
     def formatmonth(self, year, month):
         self.year, self.month = year, month
