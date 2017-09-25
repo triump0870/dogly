@@ -11,7 +11,7 @@ from app.models import Visit
 from app.utils import BoardingCalendar
 
 
-def boarding_list(request):
+def calendar(request):
     if request.method == 'POST':
         start = request.POST.get('start', "")
         end = request.POST.get('end', "")
@@ -24,18 +24,21 @@ def boarding_list(request):
 
     else:
         start_date = datetime.strptime("2016-01-01", "%Y-%m-%d").date()
-        end_date = datetime.strptime("2016-01-31", "%Y-%m-%d").date()
+        end_date = datetime.strptime("2016-02-29", "%Y-%m-%d").date()
 
+    # Todo: Bug
     visits = Visit.objects.filter(
         Q(start_date__range=(start_date, end_date)) |
         Q(end_date__range=(start_date, end_date))
     )
-    cal1 = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
-    cal2 = BoardingCalendar(visits).formatmonth(end_date.year, end_date.month)
-    return render(request, 'boarding.html', {'month1': mark_safe(cal1),'month2': mark_safe(cal2)})
+    # Todo: FIXbug
+
+    start_month = BoardingCalendar(visits).formatmonth(start_date.year, start_date.month)
+    end_month = BoardingCalendar(visits).formatmonth(end_date.year, end_date.month)
+    return render(request, 'calendar.html', {'start_month': mark_safe(start_month), 'end_month': mark_safe(end_month)})
 
 
-def in_the_house_view(request):
+def boardings(request):
     date = request.GET.get('date')
     date = datetime.strptime(date, "%Y-%m-%d").date()
     visits = Visit.objects.filter(
