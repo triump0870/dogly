@@ -18,8 +18,8 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <div class='input-group date'>
-                        <input type='text' name='start' class="form-control" placeholder="Start Date e.g: 2017-07-12">
-                        <input type="text" name='end' class="form-control" placeholder="End Date e.g: 2017-08-12">
+                        <input type='text' name='start_date' class="form-control" placeholder="Start Date e.g: 2017-07-12">
+                        <input type="text" name='end_date' class="form-control" placeholder="End Date e.g: 2017-08-12">
                         <hr>
                         <button class="btn btn-success" id='submit'>Submit</button>
                     </div>
@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" id="calendar">
     <div class="row">
         <div class="col-sm-6">
             {{start_month}}
