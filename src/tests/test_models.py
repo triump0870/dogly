@@ -11,8 +11,6 @@ from django.db.utils import IntegrityError
 from app.models import Dog, Visit
 
 
-# from django.db.models.fields import RelatedObjectDoesNotExist
-
 class DogTestCase(TestCase):
     def setUp(self):
         self.first_name = "".join([random.SystemRandom().choice(string.ascii_letters) for i in range(10)])
@@ -22,19 +20,19 @@ class DogTestCase(TestCase):
             last_name=self.last_name
         )
 
-    def test_duplicate_name(self):
+    def test__duplicate_name__raises_integrity_error(self):
         with self.assertRaises(IntegrityError) as e:
-            dog1 = Dog.objects.create(
+            Dog.objects.create(
                 first_name=self.first_name,
                 last_name=self.last_name
             )
 
-    def test_last_blank_get_accepted(self):
+    def test__last_name_blank__should_create_object(self):
         dog = Dog.objects.create(first_name=self.first_name)
         self.assertTrue(dog.first_name, self.first_name)
         self.assertFalse(dog.last_name, "")
 
-    def test_failed_without_first_name(self):
+    def test__first_name_blank__raises_validation_error(self):
         with self.assertRaises(ValidationError):
             Dog.objects.create(last_name=self.last_name)
 
@@ -55,28 +53,28 @@ class VisitTestCase(TestCase):
             end_date=self.end_date
         )
 
-    def test_without_dog_field(self):
+    def test__dog_field_blank__raises_object_does_not_exist(self):
         with self.assertRaises(ObjectDoesNotExist):
             Visit.objects.create(
                 start_date=self.start_date,
                 end_date=self.end_date
             )
 
-    def test_without_start_date_field(self):
+    def test__start_date_blank__raises_value_error(self):
         with self.assertRaises(ValueError):
             Visit.objects.create(
                 dog=self.dog,
                 start_date=self.start_date
             )
 
-    def test_without_end_date_field(self):
+    def test__end_date_blasnk__raises_value_error(self):
         with self.assertRaises(ValueError):
             Visit.objects.create(
                 dog=self.dog,
                 end_date=self.end_date
             )
 
-    def test_overlapping_visit(self):
+    def test__overlapping_visit__raises_validation_error(self):
         with self.assertRaises(ValidationError):
             Visit.objects.create(
                 dog=self.dog,
